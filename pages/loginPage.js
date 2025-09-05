@@ -4,8 +4,8 @@ class Login {
     this.page = page;
   }
 
-  async navigateToLogin() {
-    await this.page.goto('https://staging.ocgo.us/login');
+  async navigateToLogin(loginurl) {
+    await this.page.goto(loginurl+'login');
     await this.page.waitForLoadState('networkidle');
   }
 
@@ -13,7 +13,6 @@ class Login {
     await this.page.getByLabel('Email').fill(email);
     await this.page.getByLabel('Password').fill(password);
     await this.page.getByRole('button', { name: 'Sign in' }).click();
-    await this.page.waitForURL("https://staging.ocgo.us/meetings/upcoming");
   }
 
   async verifyMeetingPage() {

@@ -11,11 +11,16 @@
     "allure:serve": "allure serve allure-results",
     "test:allure": "playwright test --reporter=allure-playwright && npm run allure:generate && npm run allure:open"
   },
-  "keywords": ["playwright", "testing", "automation", "allure"],
+  "keywords": [
+    "playwright",
+    "testing",
+    "automation",
+    "allure"
+  ],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@playwright/test": "^1.40.0",
-    "allure-playwright": "^2.10.0"
+    "allure-playwright": "^2.15.1"
   }
 }
