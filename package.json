@@ -1,0 +1,21 @@
+{
+  "name": "ucass-automation",
+  "version": "1.0.0",
+  "description": "Automated testing for Ucass application",
+  "main": "index.js",
+  "scripts": {
+    "test": "playwright test",
+    "test:staging": "playwright test tests/stagingCall.spec.js",
+    "allure:generate": "allure generate allure-results --clean -o allure-report",
+    "allure:open": "allure open allure-report",
+    "allure:serve": "allure serve allure-results",
+    "test:allure": "playwright test --reporter=allure-playwright && npm run allure:generate && npm run allure:open"
+  },
+  "keywords": ["playwright", "testing", "automation", "allure"],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.40.0",
+    "allure-playwright": "^2.10.0"
+  }
+}
