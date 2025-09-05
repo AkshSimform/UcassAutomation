@@ -1,5 +1,5 @@
 import { test, expect, chromium } from '@playwright/test';
-import { stagingCallPage } from '../pages/stagingCallPage';
+import { CallPage } from '../pages/callPage';
 import { Login } from "../pages/loginPage";
 import env from '../utils/environment';
 
@@ -8,60 +8,57 @@ test.describe('Checking Call Module', () => {
     test.setTimeout(180000); // 3 minutes timeout
     const context = await browser.newContext();
     const page = await context.newPage();
-    const stagingCall = new stagingCallPage(page);
+    const callPage = new CallPage(page);
     const login = new Login(page);
 
-    await login.navigateToLogin();
+    await login.navigateToLogin(env.StagingbaseURL);
     await login.login(env.Stagingusername, env.Stagingpwd);
     
-    await stagingCall.openDialpad();
-    await stagingCall.enterRecipient("1042");
+    await callPage.navigateToCallSection();
+    await callPage.openDialpad();
+    await callPage.enterRecipient("1042");
 
     const edgeBrowser = await chromium.launch({ headless: false, channel: "msedge" });
     const edgePage = await edgeBrowser.newPage();
-    const stagingCallEdge = new stagingCallPage(edgePage);
+    const callPageEdge = new CallPage(edgePage);
     const loginNew = new Login(edgePage);
 
-    await loginNew.navigateToLogin();
+    await loginNew.navigateToLogin(env.StagingbaseURL);
     await loginNew.login(env.StagingRecusername, env.StagingRecpwd);
 
-    //await edgePage.waitForURL("/meetings/"); // Wait for login to complete, URL should contain 'meeting'
-    //await edgePage.waitForTimeout(10000); // Wait for login to complete before starting dial
-     await edgePage.waitForSelector(
-    "//span[@class='anticon anticon-dial ']//*[name()='svg']"
-    );
+    await callPageEdge.openDialpad();
     await page.bringToFront();
-    await stagingCall.dialCall();
+    await callPage.dialCall();
 
     await edgePage.bringToFront();
-    await stagingCallEdge.acceptCall();
+    await callPageEdge.acceptCall();
     await edgePage.waitForTimeout(2000); // Wait for call to be established
-    const dialerName = await stagingCallEdge.getDialerName();
+    const dialerName = await callPageEdge.getDialerName();
     //expect(dialerName).toBe("Akshita 1064 Gupta");
 
-    const muteClass = await stagingCallEdge.muteCall();
+    const muteClass = await callPageEdge.muteCall();
     expect(muteClass).toContain("is-clicked");
 
-    await stagingCallEdge.muteCall(); // Unmute
-    await stagingCallEdge.startRecording();
-    const recordingToast = await stagingCallEdge.startRecording();
+    await callPageEdge.muteCall(); // Unmute
+    await callPageEdge.startRecording();
+    const recordingToast = await callPageEdge.startRecording();
     expect(recordingToast).toBe("Recording has started");
 
-    await stagingCallEdge.stopRecording();
+    await callPageEdge.stopRecording();
     await edgePage.waitForTimeout(1000); // Wait for recording to stop
 
     await page.bringToFront();
-    const receiverName = await stagingCall.getDialerName();
+    const receiverName = await callPage.getDialerName();
     expect(receiverName).toBe("Akshita 11 1042");
 
-    await stagingCall.endCall();
+    await callPage.endCall();
     await page.waitForTimeout(2000); // Wait for call to end
 
     await edgePage.bringToFront();
-    await stagingCallEdge.closeCallPopup();
+    await callPageEdge.closeCallPopup();
     await edgePage.waitForTimeout(1000);
-    await stagingCallEdge.openCallHistory();
-    await stagingCallEdge.downloadRecording();
+    await callPageEdge.openCallHistory();
+    await callPageEdge.downloadRecording();
 
     await edgeBrowser.close();
   });
