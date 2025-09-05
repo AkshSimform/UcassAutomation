@@ -27,7 +27,9 @@ test.describe('Checking Call Module', () => {
 
     //await edgePage.waitForURL("/meetings/"); // Wait for login to complete, URL should contain 'meeting'
     //await edgePage.waitForTimeout(10000); // Wait for login to complete before starting dial
-    edgePage.locator("//span[@class='anticon anticon-dial ']//*[name()='svg']").waitFor({state:'visible'});
+     await edgePage.waitForSelector(
+    "//span[@class='anticon anticon-dial ']//*[name()='svg']"
+    );
     await page.bringToFront();
     await stagingCall.dialCall();
 
