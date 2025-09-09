@@ -20,11 +20,12 @@ module.exports = defineConfig({
     launchOptions: {
       args: [
         '--use-fake-ui-for-media-stream',
-        '--use-fake-device-for-media-stream',
         '--disable-notifications',
         '--allow-file-access-from-files',
         '--disable-web-security',
         '--disable-features=IsolateOrigins,site-per-process',
+        '--autoplay-policy=no-user-gesture-required',
+        '--allow-running-insecure-content',
       ],
     },
   },
